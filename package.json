@@ -1,0 +1,10 @@
+{
+  "name": "revamp-checker-app",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.3.7",
+    "bootstrap-icons": "^1.13.1"
+  }
+}
