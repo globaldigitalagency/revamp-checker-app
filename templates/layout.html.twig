@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <header>
+        {% include '_partials/_menu.html.twig' with {
+            brand: {
+                'path': '#',
+                'label': 'Scan de refonte',
+            },
+            links: [
+                {
+                    'path': path('scan_index'),
+                    'label': 'Liste des scans',
+                    'active': app.request.attributes.get('_route') == 'scan_index'
+                },
+                {
+                    'path': path('scan_new'),
+                    'label': 'Nouveau scan',
+                    'active': app.request.attributes.get('_route') == 'scan_new'
+                }
+            ]
+        } %}
+    </header>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+{% endblock %}

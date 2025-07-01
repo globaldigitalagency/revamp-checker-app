@@ -1,0 +1,29 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Nouveau scan{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        {{ form_start(form) }}
+        <h2>Scanner des sites</h2>
+        <div class="form-group">
+            {{ form_label(form.type) }}
+            {{ form_widget(form.type, {'attr': {'class': 'form-select', 'data-hide-unless-type': ''}}) }}
+            <small>{{ form_help(form.type) }}</small>
+        </div>
+        <div class="form-group" data-hide-unless="type::url">
+            {{ form_label(form.url) }}
+            {{ form_widget(form.url, {'attr': {'class': 'form-control'}}) }}
+            <small>{{ form_help(form.url) }}</small>
+            {{ form_errors(form.url) }}
+        </div>
+        <div class="form-group" data-hide-unless="type::file">
+            {{ form_label(form.file) }}
+            {{ form_widget(form.file, {'attr': {'class': 'form-control'}}) }}
+            <small>{{ form_help(form.file) }}</small>
+            {{ form_errors(form.file) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

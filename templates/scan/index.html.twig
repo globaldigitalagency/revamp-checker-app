@@ -1,0 +1,40 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Liste des scans{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for revampScan in revampScans %}
+            <div class="col-4 p-2">
+                <div class="card">
+                    <div class="card-header">{{ revampScan.url }}</div>
+                    <div class="p-3">
+                        {% if revampScan.loadingChecks %}
+                            Chargement des scans en cours...
+                        {% else %}
+                            {% for similarityCheck in revampScan.similarityChecks %}
+                                <p>
+                                    {{ similarityCheck.yearFrom }}-{{ similarityCheck.yearTo }}
+                                    ({{ similarityCheck.similarityRate }}%) :
+                                    {{ similarityCheck.isRevamp ? 'Refonte' : 'Pas de refonte' }}
+                                </p>
+                            {% else %}
+                                Aucune archive trouvée pour ce site.
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            Aucun scan effectué.
+        {% endfor %}
+
+        {% if maxPage > 1 %}
+            {% include '_partials/_pagination.html.twig' with {
+                previousLink: path('scan_index', {'page': page - 1}),
+                pageLink: path('scan_index', {'page': '__page__'}),
+                nextLink: path('scan_index', {'page': page + 1}),
+            } %}
+        {% endif %}
+    </div>
+{% endblock %}

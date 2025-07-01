@@ -13,7 +13,7 @@ framework:
             # sync: 'sync://'
 
         routing:
-            'App\Messenger\Object\RevampCheckRequest': async
+            'App\Messenger\Object\RevampScanRequest': async
 
 # when@test:
 #    framework:
