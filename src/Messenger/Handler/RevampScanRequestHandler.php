@@ -29,6 +29,9 @@ class RevampScanRequestHandler
                 $url
             )
         ){
+            if (!str_starts_with('www.', $url)) {
+                $url = 'www.'.$url;
+            }
             $url = 'https://'.$url;
         }
 
@@ -51,6 +54,8 @@ class RevampScanRequestHandler
 
         $revampScan->setLoadingChecks(false);
         $this->entityManager->flush();
+
+        sleep(60); // ~15 requests per minute limit for web.archive.org (here is max 10)
     }
 
     private function createSimilarityCheck(
