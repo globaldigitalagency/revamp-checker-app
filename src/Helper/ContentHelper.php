@@ -2,25 +2,26 @@
 
 namespace App\Helper;
 
+use Symfony\Component\HttpClient\HttpClient;
+
 class ContentHelper
 {
     public function stripText(string $content): string
     {
-        return preg_replace(['/>.+?</ism', '/<(.+?) .+?>/ism'], ['><', '<$1>'], $content);
+        return preg_replace(['/>.+?</ism', '/<(.+?) .+?>/ism'], ['><', '<$1>'], $content) ?? '';
     }
 
     public function getUrlRequestData(string $url): ?array
     {
-        $ch = curl_init();
+        $client = HttpClient::create();
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        $content = curl_exec($ch);
+        $response = $client->request('GET', $url, ['max_redirects' => 10]);
+        if ($response->getStatusCode() !== 200) {
+            return null;
+        }
 
-        $effectiveUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-        curl_close($ch);
-
+        $effectiveUrl = $response->getInfo('url');
+        $content = $response->getContent(false);
         if (!$content) {
             return null;
         }
