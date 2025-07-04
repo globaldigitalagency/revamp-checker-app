@@ -36,9 +36,11 @@ class ScanController extends AbstractController
             if (!empty($file)) {
                 $file->move(sprintf('%s/%s', $this->projectDir, $this->csvUploadDir), $file->getClientOriginalName());
 
-                $urls = $this->sheetHelper->getSheetData(
+                $sheetData = $this->sheetHelper->getSheetData(
                     sprintf('%s/%s/%s', $this->projectDir, $this->csvUploadDir, $file->getClientOriginalName())
                 );
+
+                $urls = array_map(static fn($row) => $row['A'], $sheetData);
             } else {
                 $urls[] = $form->get('url')->getData();
             }
