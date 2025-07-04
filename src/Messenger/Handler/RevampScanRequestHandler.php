@@ -23,17 +23,6 @@ class RevampScanRequestHandler
     public function __invoke(RevampScanRequest $revampScanRequest): void
     {
         $url = $revampScanRequest->getUrl();
-        if (
-            !preg_match(
-                '/^https:\/\//mi',
-                $url
-            )
-        ){
-            if (!str_starts_with('www.', $url)) {
-                $url = 'www.'.$url;
-            }
-            $url = 'https://'.$url;
-        }
 
         $revampScan = new RevampScan();
         $revampScan->setUrl($url);
@@ -55,7 +44,7 @@ class RevampScanRequestHandler
         $revampScan->setLoadingChecks(false);
         $this->entityManager->flush();
 
-        sleep(60); // ~15 requests per minute limit for web.archive.org (here is max 10)
+        sleep(180); // sleep to counter max request blocking by web archive (3 minutes)
     }
 
     private function createSimilarityCheck(

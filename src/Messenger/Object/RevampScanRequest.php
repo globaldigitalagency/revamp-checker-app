@@ -4,7 +4,7 @@ namespace App\Messenger\Object;
 
 class RevampScanRequest
 {
-    public function __construct(private string $url)
+    public function __construct(private readonly string $url)
     {
     }
 
