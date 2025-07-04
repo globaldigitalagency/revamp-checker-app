@@ -17,9 +17,3 @@
 /.yarnrc
 /.npmrc
 /.bash_project_perso.sh
-
-###> symfony/webpack-encore-bundle ###
-/node_modules/
-npm-debug.log
-yarn-error.log
-###< symfony/webpack-encore-bundle ###

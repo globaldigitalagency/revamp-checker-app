@@ -1,7 +1,7 @@
 services:
   web:
     container_name: web_revamp-checker-app
-    image: globaldigitalagency/sample:8.4
+    image: globaldigitalagency/sample:8.3
     labels:
       - "traefik.enable=true"
       # http
