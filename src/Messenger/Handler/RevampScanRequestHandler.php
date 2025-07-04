@@ -30,16 +30,15 @@ class RevampScanRequestHandler
         $this->entityManager->persist($revampScan);
         $this->entityManager->flush();
 
-        $currentYear = (int)(new DateTime())->format('Y');
-        for ($years = 1; $years < 6; $years++) {
+        for ($years = 5; $years > 0; $years--) {
             try {
-                $similarityCheck = $this->createSimilarityCheck($url, $years, $revampScan, $currentYear);
-
-                $this->entityManager->persist($similarityCheck);
-                $revampScan->addSimilarityCheck($similarityCheck);
+                $similarityCheck = $this->createSimilarityCheck($url, $years, $revampScan);
             } catch (Exception $e) {
                 continue;
             }
+
+            $this->entityManager->persist($similarityCheck);
+            $revampScan->addSimilarityCheck($similarityCheck);
         }
 
         $revampScan->setLoadingChecks(false);
@@ -66,12 +65,15 @@ class RevampScanRequestHandler
             );
         }
 
-        $similarityRate = $this->checkerHelper->compareFromDate($fromUrl, $toUrl);
+        list($fromRequestUrl, $toRequestUrl, $similarityRate) = $this->checkerHelper->compareFromDate($fromUrl, $toUrl);
         $isRevamp = $this->checkerHelper->isRevampResolve($similarityRate);
 
+        $fromDate = $this->getDateFromWebArchiveUrl($fromRequestUrl);
+        $toDate = $this->getDateFromWebArchiveUrl($toRequestUrl);
+
         $similarityCheck = new SimilarityCheck();
-        $similarityCheck->setYearFrom($currentYear - $fromYears);
-        $similarityCheck->setYearTo($currentYear - $toYears);
+        $similarityCheck->setYearFrom($fromDate);
+        $similarityCheck->setYearTo($toDate);
         $similarityCheck->setIsRevamp($isRevamp);
         $similarityCheck->setRevampScan($revampScan);
         $similarityCheck->setSimilarityRate((float)number_format($similarityRate, 2));
@@ -82,5 +84,14 @@ class RevampScanRequestHandler
     private function getWebArchiveUrl(\DateTimeInterface $date, string $url): ?string
     {
         return 'https://web.archive.org/web/'.$date->format('YmdHis').'/'.$url;
+    }
+
+    private function getDateFromWebArchiveUrl(string $url): ?DateTime
+    {
+        if (!preg_match('/\/web\/(\d{14})\//', $url, $matches)) {
+            return null;
+        }
+
+        return DateTime::createFromFormat('YmdHis', $matches[1]);
     }
 }

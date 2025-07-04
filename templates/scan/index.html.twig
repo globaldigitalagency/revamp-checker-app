@@ -14,7 +14,7 @@
                         {% else %}
                             {% for similarityCheck in revampScan.similarityChecks %}
                                 <p>
-                                    {{ similarityCheck.yearFrom }}-{{ similarityCheck.yearTo }}
+                                    {{ similarityCheck.yearFrom|date('m/Y') }}-{{ similarityCheck.yearTo|date('m/Y') }}
                                     ({{ similarityCheck.similarityRate }}%) :
                                     {{ similarityCheck.isRevamp ? 'Refonte' : 'Pas de refonte' }}
                                 </p>

@@ -9,13 +9,25 @@ class ContentHelper
         return preg_replace(['/>.+?</ism', '/<(.+?) .+?>/ism'], ['><', '<$1>'], $content);
     }
 
-    public function getUrlContent(string $url): ?string
+    public function getUrlRequestData(string $url): ?array
     {
-        $content = file_get_contents($url);
-        if ($content === false) {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $content = curl_exec($ch);
+
+        $effectiveUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+        curl_close($ch);
+
+        if (!$content) {
             return null;
         }
 
-        return $content;
+        return [
+            'url' => $effectiveUrl,
+            'content' => $content,
+        ];
     }
 }
