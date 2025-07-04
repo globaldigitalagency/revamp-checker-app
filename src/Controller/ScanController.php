@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ScanController extends AbstractController
 {
@@ -24,31 +25,7 @@ class ScanController extends AbstractController
     ) {
     }
 
-    public function index(int $page = 1): Response
-    {
-        $revampScans = $this->revampScanRepository->findAll();
-        if (!empty($revampScans)) {
-            $maxPage = ceil(count($revampScans) / self::NUMBER_BY_PAGE);
-            if ($maxPage <= 0) {
-                return $this->redirectToRoute('scan_index', [
-                    'page' => 1,
-                ]);
-            } elseif ($page < 1 || $page > $maxPage) {
-                return $this->redirectToRoute('scan_index', [
-                    'page' => 1,
-                ]);
-            }
-        }
-
-        $revampScans = $this->revampScanRepository->getPaginatedScans($page, self::NUMBER_BY_PAGE);
-
-        return $this->render('scan/index.html.twig', [
-            'revampScans' => $revampScans,
-            'maxPage' => $maxPage ?? 1,
-            'page' => $page,
-        ]);
-    }
-
+    #[Route(path: '/scan/new', name: 'scan_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $form = $this->createForm(RevampScanRequestFormType::class);
@@ -83,6 +60,32 @@ class ScanController extends AbstractController
 
         return $this->render('scan/new.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route(path: '/scan/{page}', name: 'scan_index', defaults: ['page' => 1], methods: ['GET'])]
+    public function index(int $page = 1): Response
+    {
+        $revampScans = $this->revampScanRepository->findAll();
+        if (!empty($revampScans)) {
+            $maxPage = ceil(count($revampScans) / self::NUMBER_BY_PAGE);
+            if ($maxPage <= 0) {
+                return $this->redirectToRoute('scan_index', [
+                    'page' => 1,
+                ]);
+            } elseif ($page < 1 || $page > $maxPage) {
+                return $this->redirectToRoute('scan_index', [
+                    'page' => 1,
+                ]);
+            }
+        }
+
+        $revampScans = $this->revampScanRepository->getPaginatedScans($page, self::NUMBER_BY_PAGE);
+
+        return $this->render('scan/index.html.twig', [
+            'revampScans' => $revampScans,
+            'maxPage' => $maxPage ?? 1,
+            'page' => $page,
         ]);
     }
 }

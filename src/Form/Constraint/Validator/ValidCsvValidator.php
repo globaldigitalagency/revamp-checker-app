@@ -15,7 +15,7 @@ class ValidCsvValidator extends ConstraintValidator
             return;
         }
 
-        $allowaedMimeTypes = [
+        $allowedMimeTypes = [
             'text/csv',
             'application/csv',
             'text/plain',
@@ -26,7 +26,7 @@ class ValidCsvValidator extends ConstraintValidator
                 $handle === false ||
                 fgetcsv($handle) === false ||
                 $value->getClientOriginalExtension() !== 'csv' ||
-                !in_array($value->getMimeType(), $allowaedMimeTypes)
+                !in_array($value->getMimeType(), $allowedMimeTypes)
             ) {
                 $this->context
                     ->buildViolation($constraint->message)
