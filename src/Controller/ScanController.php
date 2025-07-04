@@ -65,7 +65,10 @@ class ScanController extends AbstractController
             }
 
             foreach ($urls as $url) {
-                if ($url !== null && preg_match('/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)\/?$/mi', $url)) {
+                if ($url !== null && preg_match(
+                        '/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)\/?$/mi',
+                        $url
+                    )) {
                     $this->bus->dispatch(new RevampScanRequest($url));
                 }
             }
