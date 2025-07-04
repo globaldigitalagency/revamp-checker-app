@@ -11,15 +11,19 @@ class CheckerHelper
     {
     }
 
-    public function compareFromDate(string $fromDateUrl, string $toDateUrl): float
+    public function compareFromDate(string $fromDateUrl, string $toDateUrl): array
     {
-        $fromDateContent = $this->contentHelper->getUrlContent($fromDateUrl);
-        $toDateContent = $this->contentHelper->getUrlContent($toDateUrl);
-        if (empty($fromDateContent) || empty($toDateContent)) {
+        $fromDateRequest = $this->contentHelper->getUrlRequestData($fromDateUrl);
+        $toDateRequest = $this->contentHelper->getUrlRequestData($toDateUrl);
+        if (empty($fromDateRequest) || empty($toDateRequest)) {
             throw new Exception('Content from one of the URLs is empty or could not be retrieved.');
         }
 
-        return $this->checkSimilarity($toDateContent, $fromDateContent);
+        return [
+            $fromDateRequest['url'],
+            $toDateRequest['url'],
+            $this->checkSimilarity($toDateRequest['content'], $fromDateRequest['content']),
+        ];
     }
 
     private function checkSimilarity(string $content1, string $content2): float

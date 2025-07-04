@@ -27,22 +27,24 @@ class ScanController extends AbstractController
     public function index(int $page = 1): Response
     {
         $revampScans = $this->revampScanRepository->findAll();
-        $maxPage = ceil(count($revampScans) / self::NUMBER_BY_PAGE);
-        if ($maxPage <= 0) {
-            return $this->redirectToRoute('scan_index', [
-                'page' => 1,
-            ]);
-        } elseif ($page < 1 || $page > $maxPage) {
-            return $this->redirectToRoute('scan_index', [
-                'page' => 1,
-            ]);
+        if (!empty($revampScans)) {
+            $maxPage = ceil(count($revampScans) / self::NUMBER_BY_PAGE);
+            if ($maxPage <= 0) {
+                return $this->redirectToRoute('scan_index', [
+                    'page' => 1,
+                ]);
+            } elseif ($page < 1 || $page > $maxPage) {
+                return $this->redirectToRoute('scan_index', [
+                    'page' => 1,
+                ]);
+            }
         }
 
         $revampScans = $this->revampScanRepository->getPaginatedScans($page, self::NUMBER_BY_PAGE);
 
         return $this->render('scan/index.html.twig', [
             'revampScans' => $revampScans,
-            'maxPage' => $maxPage,
+            'maxPage' => $maxPage ?? 1,
             'page' => $page,
         ]);
     }
@@ -70,7 +72,7 @@ class ScanController extends AbstractController
                 }
             }
 
-            $this->redirectToRoute('scan_index');
+            return $this->redirectToRoute('scan_index');
         }
 
         return $this->render('scan/new.html.twig', [

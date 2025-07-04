@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SimilarityCheckRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SimilarityCheckRepository::class)]
@@ -13,14 +14,14 @@ class SimilarityCheck
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 4)]
-    private ?string $yearFrom = null;
-
-    #[ORM\Column(length: 4)]
-    private ?string $yearTo = null;
+    #[ORM\Column]
+    private ?DateTime $yearFrom = null;
 
     #[ORM\Column]
-    private ?bool $isRevamp = null;
+    private ?DateTime $yearTo = null;
+
+    #[ORM\Column]
+    private ?bool $isRevamp = false;
 
     #[ORM\ManyToOne(inversedBy: 'similarityChecks')]
     #[ORM\JoinColumn(nullable: false)]
@@ -34,24 +35,24 @@ class SimilarityCheck
         return $this->id;
     }
 
-    public function getYearFrom(): ?string
+    public function getYearFrom(): ?DateTime
     {
         return $this->yearFrom;
     }
 
-    public function setYearFrom(string $yearFrom): static
+    public function setYearFrom(DateTime $yearFrom): static
     {
         $this->yearFrom = $yearFrom;
 
         return $this;
     }
 
-    public function getYearTo(): ?string
+    public function getYearTo(): ?DateTime
     {
         return $this->yearTo;
     }
 
-    public function setYearTo(string $yearTo): static
+    public function setYearTo(DateTime $yearTo): static
     {
         $this->yearTo = $yearTo;
 
