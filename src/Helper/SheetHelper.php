@@ -3,9 +3,6 @@
 namespace App\Helper;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Reader\Csv;
-use PhpOffice\PhpSpreadsheet\Reader\Xls;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class SheetHelper
 {
@@ -21,11 +18,8 @@ class SheetHelper
         $highestColumn = $worksheet->getHighestDataColumn();
 
         $data = $worksheet->rangesToArray(
-            'A1:'.$highestColumn.$highestRow,
-            null,
-            true,
-            true,
-            true
+            ranges: 'A1:'.$highestColumn.$highestRow,
+            returnCellRef: true
         );
 
         unlink($filePath);
