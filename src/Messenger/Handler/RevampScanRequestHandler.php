@@ -23,6 +23,14 @@ class RevampScanRequestHandler
     public function __invoke(RevampScanRequest $revampScanRequest): void
     {
         $url = $revampScanRequest->getUrl();
+        if (
+            !preg_match(
+                '/^https:\/\//mi',
+                $url
+            )
+        ){
+            $url = 'https://'.$url;
+        }
 
         $revampScan = new RevampScan();
         $revampScan->setUrl($url);
