@@ -48,8 +48,7 @@ class RevampScanRequestHandler
     private function createSimilarityCheck(
         string $url,
         int $years,
-        RevampScan $revampScan,
-        int $currentYear
+        RevampScan $revampScan
     ): SimilarityCheck {
         $fromYears = $years;
         $toYears = $fromYears - 1;
