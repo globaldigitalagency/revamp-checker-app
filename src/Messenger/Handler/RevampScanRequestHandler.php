@@ -16,11 +16,11 @@ class RevampScanRequestHandler
 {
     public function __construct(
         private readonly CheckerHelper $checkerHelper,
-        private EntityManagerInterface $entityManager,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
-    public function __invoke(RevampScanRequest $revampScanRequest)
+    public function __invoke(RevampScanRequest $revampScanRequest): void
     {
         $url = $revampScanRequest->getUrl();
 
@@ -33,7 +33,7 @@ class RevampScanRequestHandler
         for ($years = 5; $years > 0; $years--) {
             try {
                 $similarityCheck = $this->createSimilarityCheck($url, $years, $revampScan);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 continue;
             }
 

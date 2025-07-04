@@ -6,6 +6,7 @@ export default function hideUnless() {
 
     let hideUnlessAttributes = Object.values(hideUnlessElements).map((element) => {
         let condition = getConditionObject(element.getAttribute('data-hide-unless'));
+
         return condition?.name;
     });
     hideUnlessAttributes = hideUnlessAttributes.filter(
@@ -16,6 +17,7 @@ export default function hideUnless() {
         document.querySelector(`[data-hide-unless-${id}]`).addEventListener('change', () => {
             let elements = Object.values(hideUnlessElements).filter((element) => {
                 let condition = getConditionObject(element.getAttribute('data-hide-unless'));
+
                 return condition?.name === id;
             })
 

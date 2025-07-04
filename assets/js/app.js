@@ -6,6 +6,6 @@ import '../scss/app.scss';
 
 import hideUnless from './utils/_hideUnless.js';
 
-window.addEventListener('load', function (event) {
+window.addEventListener('load', function () {
     hideUnless();
 });

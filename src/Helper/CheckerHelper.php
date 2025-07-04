@@ -6,7 +6,7 @@ use Exception;
 
 class CheckerHelper
 {
-    public function __construct(private ContentHelper $contentHelper)
+    public function __construct(private readonly ContentHelper $contentHelper)
     {
     }
 
