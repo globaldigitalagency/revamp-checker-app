@@ -2,20 +2,23 @@
 
 namespace App\Helper;
 
-use Symfony\Component\HttpClient\HttpClient;
+use RuntimeException;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ContentHelper
 {
+    public function __construct(private readonly HttpClientInterface $client)
+    {
+    }
+
     public function stripText(string $content): string
     {
-        return preg_replace(['/>.+?</ism', '/<(.+?) .+?>/ism'], ['><', '<$1>'], $content) ?? '';
+        return preg_replace(['/>.*?</ism', '/<(.+?) .+?>/ism'], ['><', '<$1>'], $content) ?? '';
     }
 
     public function getUrlRequestData(string $url): ?array
     {
-        $client = HttpClient::create();
-
-        $response = $client->request('GET', $url, ['max_redirects' => 10]);
+        $response = $this->client->request('GET', $url, ['max_redirects' => 10]);
         if ($response->getStatusCode() !== 200) {
             return null;
         }

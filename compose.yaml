@@ -5,11 +5,12 @@ services:
     labels:
       - "traefik.enable=true"
       # http
-      - "traefik.http.routers.revamp-checker-app.rule=Host(`revamp-checker-app.wsl`)"
-      - "traefik.http.routers.revamp-checker-app.entrypoints=web"
+#      - "traefik.http.routers.revamp-checker-app.rule=Host(`revamp-checker-app.wsl`)"
+#      - "traefik.http.routers.revamp-checker-app.entrypoints=web"
       # https
       - "traefik.http.routers.revamp-checker-app_https.tls=true"
       - "traefik.http.routers.revamp-checker-app_https.rule=Host(`revamp-checker-app.wsl`)"
+      - "traefik.http.services.revamp-checker-app_https.loadbalancer.server.port=80"
       - "traefik.http.routers.revamp-checker-app_https.entrypoints=websecure"
     volumes:
       - .:/var/www
